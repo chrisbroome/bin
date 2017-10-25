@@ -1,0 +1,51 @@
+#!/bin/bash
+
+uname=`uname | tr "[:upper:]" "[:lower:]"`
+
+ver=${ver:-v8.8.0}
+#os='linux'
+#os='darwin'
+os=${os:-$uname}
+arch='x64'
+name="node-${ver}-${os}-${arch}"
+fname="${name}.tar.xz"
+tmp='/tmp'
+tmpfname="${tmp}/${fname}"
+tmptardir="${tmp}/${name}"
+target='/usr/local'
+
+owner=${USER}
+group=${USER}
+
+# set group on OSX
+if [[ "$uname" -eq "darwin" ]]; then
+  group=admin
+fi
+
+url="https://nodejs.org/dist/${ver}/${fname}"
+
+if [ -n `which node` -a \( `node -v` == ${ver} \) ]; then
+  echo "Your node version is up to date as of ${ver}"
+  exit
+fi
+
+echo "Setting permissions"
+chown -R ${owner}:${group} ${target} || sudo chown -R ${owner}:${group} ${target}
+
+currentvers=`node -p 'JSON.stringify(process.versions, null, 2)'`
+
+echo "Upgrading from node ${currentver}"
+
+echo "Downloading Node.js version ${ver} to ${tmpfname} from ${url}"
+wget ${url} -O ${tmpfname}
+
+echo "Extracting ${tmpfname} to ${tmp}/${name}"
+mkdir -p ${tmptardir} && pushd ${tmp} && tar Jxf ${tmpfname} --strip 1 -C ${tmptardir} && popd
+
+echo "Installing ${name} to ${target}"
+pushd ${tmptardir} && cp -R {bin,include,lib,share} $target && popd
+
+updatedvers=`node -p 'JSON.stringify(process.versions, null, 2)'`
+
+printf "Success. Upgraded\nOld: %s\nNew: %s" "${currentvers}" "${updatedvers}"
+

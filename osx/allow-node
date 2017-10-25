@@ -1,0 +1,19 @@
+#/bin/bash
+FW="/usr/libexec/ApplicationFirewall/socketfilterfw"
+# Duplicating these commands on purpose as the symbolic link node might be
+# linked to either out/Debug/node or out/Release/node depending on the BUILDTYPE
+$FW --remove $PWD/out/Debug/node
+$FW --remove $PWD/out/Debug/node
+$FW --remove $PWD/out/Release/node
+$FW --remove $PWD/out/Release/node
+$FW --listapps
+
+$FW --add $PWD/out/Debug/node
+$FW --add $PWD/out/Release/node
+$FW --add $PWD/node
+
+$FW --unblock $PWD/out/Debug/node
+$FW --unblock $PWD/out/Release/node
+$FW --unblock $PWD/node
+
+$FW --listapps

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+function gupdate {
+  if [ -z "$(git remote)" ]; then
+    printf 'No remote\n'
+  else
+    printf '\n'
+    git fetch --all --prune && git rebase --fork-point --stat
+  fi
+}
+
+for d in *; do
+  if [ -d "$d" ]; then
+    if [ -d "$d/.git" ]; then
+      pushd $d > /dev/null && (
+        bn="$(basename `pwd`)"
+        branch="$(git symbolic-ref --short HEAD)"
+        printf '\033[01;34m%s\033[0m: \033[01;33m%s\033[0m' "$bn" "$branch"
+        gupdate
+      ) && popd > /dev/null
+    fi
+  fi
+done

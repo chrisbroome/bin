@@ -1,0 +1,10 @@
+#!/bin/bash
+
+find . -type d \( -path '**/.git/**' -o -path '**/node_modules/**' -o -path '**/vendor/**' \) -prune \
+  -o -name '*.go*' -exec grep --color -Hn $1 {} \; #2>/dev/null \;
+
+#find . \
+#  \( -name .git -prune \) \
+#  \( -name node_modules -prune \) \
+#  \( -name vendor -prune \) \
+#  -o -name '*.go' -exec grep --color -Hn $1 {} 2>/dev/null \;

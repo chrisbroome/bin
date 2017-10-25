@@ -1,0 +1,2 @@
+#!/bin/bash
+for d in *; do pushd $d > /dev/null && printf '\033[01;34m%s\033[0m: \033[01;33m%s\033[0m\n' "$(basename `pwd`)" "$(git symbolic-ref --short HEAD)" && popd > /dev/null; done

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+function gstatus {
+  if [ -z "$(git status --porcelain -z)" ]; then
+    printf ''
+  else
+    printf '\n%s' "$(git status --porcelain)"
+  fi
+}
+
+for d in *
+do
+  if [ -d "$d" ]; then
+    if [ -d "$d/.git" ]; then
+      pushd $d > /dev/null && printf '\033[01;34m%s\033[0m: \033[01;33m%s\033[0m%s\n' "$(basename `pwd`)" "$(git symbolic-ref --short HEAD)" "$(gstatus)" && popd > /dev/null
+    fi
+  fi
+done
+
