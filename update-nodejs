@@ -2,7 +2,7 @@
 
 uname=`uname | tr "[:upper:]" "[:lower:]"`
 
-ver=${ver:-v9.2.0}
+ver=${ver:-v9.2.1}
 #os='linux'
 #os='darwin'
 os=${os:-$uname}
