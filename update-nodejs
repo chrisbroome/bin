@@ -18,7 +18,7 @@ owner=${USER}
 group=${USER}
 
 # set group on OSX
-if [[ "$uname" -eq "darwin" ]]; then
+if [[ "$uname" == "darwin" ]]; then
   group=admin
 fi
 
